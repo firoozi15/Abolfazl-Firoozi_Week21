@@ -1,10 +1,13 @@
 :root {
-  --main: #4c78ea;
+  --main: #55a3f0;
   --background: #f9f9f9;
   --text: #212121;
   --gray: #b9b9b9;
-  --red: #ee6e7a;
+  --red: #f43f5e;
   --white: #ffffff;
+  --table_header: #f2f2f2;
+  --green: #4ade80;
+  --pagination: #8d8d8d;
 
   --success-border: #01c851;
   --error-border: #ff3447;
