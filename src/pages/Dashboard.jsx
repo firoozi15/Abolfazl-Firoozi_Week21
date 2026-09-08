@@ -4,8 +4,17 @@ import { CiSearch } from "react-icons/ci";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
+import { useEffect } from "react";
+import { getProducts } from "../services/productService";
 
 function Dashboard() {
+  useEffect(() => {
+    const getAllProducts = async () => {
+      const products = await getProducts();
+      console.log(products);
+    };
+    getAllProducts();
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
