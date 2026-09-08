@@ -6,9 +6,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import styles from "./Login_Register.module.css";
 import { loginSchema } from "../schemas/FormSchema";
-import { setAuthCookie } from "../utils/cookie";
+
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Login() {
+  const { login } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -20,7 +23,7 @@ function Login() {
   const onSubmit = async (data) => {
     try {
       const response = await loginUser(data.username, data.password);
-      setAuthCookie(response.data.token, response.data.user);
+      login(response.data.token, response.data.user);
     } catch (error) {
       console.log(error.response);
     }
