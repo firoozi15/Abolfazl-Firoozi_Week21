@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import styles from "./Login_Register.module.css";
 import { loginSchema } from "../schemas/FormSchema";
+import { setAuthCookie } from "../utils/cookie";
 
 function Login() {
   const {
@@ -19,7 +20,7 @@ function Login() {
   const onSubmit = async (data) => {
     try {
       const response = await loginUser(data.username, data.password);
-      console.log(response);
+      setAuthCookie(response.data.token, response.data.user);
     } catch (error) {
       console.log(error.response);
     }
