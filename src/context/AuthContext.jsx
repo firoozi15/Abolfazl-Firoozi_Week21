@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isLoadingCookie, setIsLoadingCookie] = useState(true);
 
   const login = (token, userData) => {
     setAuthCookie(token, userData);
@@ -20,10 +21,11 @@ function AuthProvider({ children }) {
   useEffect(() => {
     const { user: data } = getAuthCookie();
     setUser(data);
+    setIsLoadingCookie(false);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoadingCookie }}>
       {children}
     </AuthContext.Provider>
   );
