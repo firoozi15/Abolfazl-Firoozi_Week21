@@ -4,4 +4,8 @@ const registerUser = (username, password) => {
   return api.post("/auth/register", { username, password });
 };
 
-export { registerUser };
+const loginUser = (username, password) => {
+  return api.post("/auth/login", { username, password });
+};
+
+export { registerUser, loginUser };
