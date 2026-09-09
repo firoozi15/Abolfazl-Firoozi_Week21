@@ -18,12 +18,24 @@ function AuthProvider({ children }) {
   const logout = () => {
     logoutUser();
     setUser(null);
+    setToken(null);
   };
 
   useEffect(() => {
-    const { user: data } = getAuthCookie();
+    const { token, user: data } = getAuthCookie();
     setUser(data);
+    setToken(token);
     setIsLoadingCookie(false);
+  }, []);
+
+  useEffect(() => {
+    const logoutHandler = () => {
+      logout();
+    };
+    window.addEventListener("auth:logout", logoutHandler);
+    return () => {
+      window.removeEventListener("auth:logout", logoutHandler);
+    };
   }, []);
 
   return (
