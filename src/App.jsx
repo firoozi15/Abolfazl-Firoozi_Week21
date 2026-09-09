@@ -7,12 +7,14 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AuthProvider from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminRoute from "./routes/AdminRoute";
+import GuestRoute from "./routes/GuestRoute";
 
 function App() {
   return (
     <>
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route path="/" element={<Products />} />
             <Route path="/products" element={<Navigate to="/" />} />
@@ -20,18 +22,32 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                <AdminRoute>
                   <Dashboard />
-                </ProtectedRoute>
+                </AdminRoute>
               }
             />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/login"
+              element={
+                <GuestRoute>
+                  <Login />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <GuestRoute>
+                  <Register />
+                </GuestRoute>
+              }
+            />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </>
   );
 }
