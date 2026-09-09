@@ -5,21 +5,48 @@ import Card from "./pages/Card";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AuthProvider from "./context/AuthContext";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminRoute from "./routes/AdminRoute";
+import GuestRoute from "./routes/GuestRoute";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Products />} />
-          <Route path="/products" element={<Navigate to="/"/>} />
-          <Route path="/card" element={<Card />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Products />} />
+            <Route path="/products" element={<Navigate to="/" />} />
+            <Route path="/card" element={<Card />} />
+            <Route
+              path="/dashboard"
+              element={
+                <AdminRoute>
+                  <Dashboard />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <GuestRoute>
+                  <Login />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <GuestRoute>
+                  <Register />
+                </GuestRoute>
+              }
+            />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </>
   );
