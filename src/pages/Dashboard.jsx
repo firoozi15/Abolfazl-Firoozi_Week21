@@ -7,17 +7,28 @@ import { getProducts } from "../services/productService";
 import ProductCard from "../components/ProductCard";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Pagination from "../components/Pagination";
+import LimitProductTable from "../components/LimitProductTable";
 
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limitProduct, setLimitProduct] = useState(10);
   useEffect(() => {
     const getAllProducts = async () => {
-      const products = await getProducts();
+      const products = await getProducts(page, limitProduct);
+      setTotalPages(products.totalPages);
       setProducts(products.data);
     };
     getAllProducts();
-  }, []);
+  }, [page, limitProduct]);
+
+  const limitProductHandler = (number) => {
+    setLimitProduct(number);
+    setPage(1);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -44,6 +55,10 @@ function Dashboard() {
           </div>
           <button>افزودن محصول</button>
         </div>
+        <LimitProductTable
+          limitProduct={limitProduct}
+          limitProductHandler={limitProductHandler}
+        />
         <table className={styles.products_table}>
           <thead>
             <tr className={styles.table_haeder}>
@@ -60,10 +75,7 @@ function Dashboard() {
             ))}
           </tbody>
         </table>
-        <div className={styles.pagination}>
-          <span className={styles.page_selected}>۱</span>
-          <span>۲</span>
-        </div>
+        <Pagination totalPages={totalPages} setPage={setPage} page={page} />
       </div>
     </div>
   );

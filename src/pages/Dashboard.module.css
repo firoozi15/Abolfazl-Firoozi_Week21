@@ -100,6 +100,32 @@
   height: 30px;
 }
 
+.buttons_limit{
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  margin-bottom: 5px;
+  gap: 1px;
+}
+
+.buttons_limit p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+  width: 50px;
+  background-color: var(--white);
+  border: 1px solid var(--gray_background);
+  font-size: 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buttons_limit .selectedlimit{
+  background-color: var(--main);
+  color: var(--white);
+}
+
 .main_header button {
   width: 135px;
   height: 45px;
@@ -109,6 +135,7 @@
   border: none;
   cursor: pointer;
 }
+
 
 .products_table {
   text-align: right;
@@ -166,6 +193,7 @@
   height: 35px;
   border-radius: 50%;
   border: 2px solid var(--pagination);
+  cursor: pointer;
 }
 
 .pagination .page_selected {

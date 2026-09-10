@@ -1,10 +1,10 @@
 import api from "./api";
 
-const getProducts = () => {
+const getProducts = (page,limit) => {
   const result = api
-    .get("/products?page=1&limit=10")
+    .get(`/products?page=${page}&limit=${limit}`)
     .then((response) => response.data)
-    // .catch(console.log("error"));
+    .catch((error => console.log(error)));
 
   return result;
 };
