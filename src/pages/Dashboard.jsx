@@ -2,16 +2,19 @@ import styles from "./Dashboard.module.css";
 
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import { MdDeleteOutline } from "react-icons/md";
-import { BiEdit } from "react-icons/bi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getProducts } from "../services/productService";
+import ProductCard from "../components/ProductCard";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Dashboard() {
+  const { user, logout } = useContext(AuthContext);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     const getAllProducts = async () => {
       const products = await getProducts();
-      console.log(products);
+      setProducts(products.data);
     };
     getAllProducts();
   }, []);
@@ -25,8 +28,11 @@ function Dashboard() {
         <div className={styles.admin_details}>
           <img src="/icon/user.png" alt="admin icon" />
           <div>
-            <h3>ابوالفضل فیروزی</h3>
-            <p>مدیر</p>
+            <h3>{user.username}</h3>
+            <div>
+              <p>مدیر</p>
+              <button onClick={() => logout()}>خروج</button>
+            </div>
           </div>
         </div>
       </div>
@@ -49,20 +55,9 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>تیشرت طرح انگولار</td>
-              <td>120</td>
-              <td>90 هزار تومان</td>
-              <td>90uf9g9h7895467g974</td>
-              <td>
-                <button className={styles.button_edit}>
-                  <BiEdit />
-                </button>
-                <button className={styles.button_delete}>
-                  <MdDeleteOutline />
-                </button>
-              </td>
-            </tr>
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </tbody>
         </table>
         <div className={styles.pagination}>
