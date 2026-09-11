@@ -3,7 +3,7 @@ import styles from "./Dashboard.module.css";
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { getProducts } from "../services/productService";
+import { getProducts, deleteProduct } from "../services/productService";
 import ProductCard from "../components/ProductCard";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -24,6 +24,12 @@ function Dashboard() {
     };
     getAllProducts();
   }, [page, limitProduct]);
+
+  const deleteHandler = async (id) => {
+    await deleteProduct(id);
+
+    setProducts((prev) => prev.filter((product) => product.id !== id));
+  };
 
   const limitProductHandler = (number) => {
     setLimitProduct(number);
@@ -71,7 +77,11 @@ function Dashboard() {
           </thead>
           <tbody>
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onDelete={deleteHandler}
+              />
             ))}
           </tbody>
         </table>
