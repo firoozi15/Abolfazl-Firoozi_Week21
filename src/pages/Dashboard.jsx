@@ -11,6 +11,7 @@ import Pagination from "../components/Pagination";
 import LimitProductTable from "../components/LimitProductTable";
 
 import ConfirmModal from "../components/ConfirmModal";
+import ProductForm from "../components/ProductForm";
 
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -18,6 +19,8 @@ function Dashboard() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [limitProduct, setLimitProduct] = useState(10);
+
+  const [showProductForm, setShowProductForm] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -71,7 +74,7 @@ function Dashboard() {
             <AiOutlineAppstoreAdd />
             <h2>مدیریت کالا</h2>
           </div>
-          <button>افزودن محصول</button>
+          <button onClick={() => setShowProductForm(true)}>افزودن محصول</button>
         </div>
         <LimitProductTable
           limitProduct={limitProduct}
@@ -116,6 +119,9 @@ function Dashboard() {
             deleteHandler(deleteId);
           }}
         />
+      )}
+      {showProductForm && (
+        <ProductForm closeForm={() => setShowProductForm(false)} />
       )}
     </div>
   );
