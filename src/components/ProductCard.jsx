@@ -3,7 +3,7 @@ import { MdDeleteOutline } from "react-icons/md";
 
 import styles from "../pages/Dashboard.module.css";
 
-function ProductCard({ product, onDelete }) {
+function ProductCard({ product, setDeleteId, showModal }) {
   const { id, name, price, quantity } = product;
   return (
     <tr>
@@ -15,7 +15,13 @@ function ProductCard({ product, onDelete }) {
         <button className={styles.button_edit}>
           <BiEdit />
         </button>
-        <button onClick={() => onDelete(id)} className={styles.button_delete}>
+        <button
+          onClick={() => {
+            showModal();
+            setDeleteId(id);
+          }}
+          className={styles.button_delete}
+        >
           <MdDeleteOutline />
         </button>
       </td>

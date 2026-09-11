@@ -10,15 +10,24 @@ import { AuthContext } from "../context/AuthContext";
 import Pagination from "../components/Pagination";
 import LimitProductTable from "../components/LimitProductTable";
 
+import ConfirmModal from "../components/ConfirmModal";
+
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [limitProduct, setLimitProduct] = useState(10);
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const closeModal = () => setShowConfirm(false);
+  const showModal = () => setShowConfirm(true);
+
   useEffect(() => {
     const getAllProducts = async () => {
       const products = await getProducts(page, limitProduct);
+      if (!products) return;
       setTotalPages(products.totalPages);
       setProducts(products.data);
     };
@@ -27,8 +36,11 @@ function Dashboard() {
 
   const deleteHandler = async (id) => {
     await deleteProduct(id);
-
-    setProducts((prev) => prev.filter((product) => product.id !== id));
+    const updatedProducts = products.filter((product) => product.id !== id);
+    setProducts(updatedProducts);
+    if (updatedProducts.length === 0 && page > 1) {
+      setPage((prev) => prev - 1);
+    }
   };
 
   const limitProductHandler = (number) => {
@@ -76,17 +88,35 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onDelete={deleteHandler}
-              />
-            ))}
+            {products.length === 0 && (
+              <tr>
+                <td colSpan="5">داده ای یافت نشد.</td>
+              </tr>
+            )}
+            {products.length > 0 &&
+              products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  setDeleteId={setDeleteId}
+                  showModal={showModal}
+                />
+              ))}
           </tbody>
         </table>
         <Pagination totalPages={totalPages} setPage={setPage} page={page} />
       </div>
+      {showConfirm && (
+        <ConfirmModal
+          closeModal={closeModal}
+          confirmMessage={"حذف"}
+          cancelMessage={"لغو"}
+          message={"آیا از حذف این محصول مطمئنید؟"}
+          confirmFunction={() => {
+            deleteHandler(deleteId);
+          }}
+        />
+      )}
     </div>
   );
 }
