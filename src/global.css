@@ -24,3 +24,10 @@ body {
   box-sizing: border-box;
   font-family: "Vazirmatn";
 }
+
+.custom-toast {
+  font-family: "Vazirmatn", sans-serif !important;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  text-indent: 1rem;
+}

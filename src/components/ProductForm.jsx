@@ -6,6 +6,7 @@ import { formProductSchema } from "../schemas/ProductSchema";
 
 import styles from "./ProductForm.module.css";
 import { createProduct, updateProduct } from "../services/productService";
+import { toast } from "react-toastify";
 
 function ProductForm({ closeForm, selectedProduct, refreshProducts }) {
   const [isClosing, setisClosing] = useState(false);
@@ -29,14 +30,18 @@ function ProductForm({ closeForm, selectedProduct, refreshProducts }) {
 
   const onSubmit = async (data) => {
     try {
-      selectedProduct
-        ? await updateProduct(selectedProduct.id, data)
-        : await createProduct(data);
+      if (selectedProduct) {
+        await updateProduct(selectedProduct.id, data);
+        toast.success("کالا با موفقیت تغییر یافت.");
+      } else {
+        await createProduct(data);
+        toast.success("کالا با موفقیت ایجاد شد.");
+      }
 
       await refreshProducts();
       closeHandler();
     } catch (error) {
-      console.log(error);
+      toast.error("عملیات با خطا مواجه شد.");
     }
   };
 

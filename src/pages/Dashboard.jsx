@@ -12,6 +12,7 @@ import LimitProductTable from "../components/LimitProductTable";
 
 import ConfirmModal from "../components/ConfirmModal";
 import ProductForm from "../components/ProductForm";
+import { toast } from "react-toastify";
 
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -29,10 +30,14 @@ function Dashboard() {
   const showModal = () => setShowConfirm(true);
 
   const getAllProducts = async () => {
-    const products = await getProducts(page, limitProduct);
-    if (!products) return;
-    setTotalPages(products.totalPages);
-    setProducts(products.data);
+    try {
+      const products = await getProducts(page, limitProduct);
+      if (!products) return;
+      setTotalPages(products.totalPages);
+      setProducts(products.data);
+    } catch (error) {
+      toast.error("خطا در دریافت محصولات.");
+    }
   };
 
   useEffect(() => {
@@ -40,11 +45,17 @@ function Dashboard() {
   }, [page, limitProduct]);
 
   const deleteHandler = async (id) => {
-    await deleteProduct(id);
-    const updatedProducts = products.filter((product) => product.id !== id);
-    setProducts(updatedProducts);
-    if (updatedProducts.length === 0 && page > 1) {
-      setPage((prev) => prev - 1);
+    try {
+      await deleteProduct(id);
+      const updatedProducts = products.filter((product) => product.id !== id);
+      setProducts(updatedProducts);
+      toast.success("کالا با موفقیت حذف شد.");
+
+      if (updatedProducts.length === 0 && page > 1) {
+        setPage((prev) => prev - 1);
+      }
+    } catch (error) {
+      toast.error("حذف کالا با خطا مواجه شد.");
     }
   };
 
@@ -65,7 +76,14 @@ function Dashboard() {
             <h3>{user.username}</h3>
             <div>
               <p>مدیر</p>
-              <button onClick={() => logout()}>خروج</button>
+              <button
+                onClick={() => {
+                  logout();
+                  toast.success("با موفقیت خارج شدید.");
+                }}
+              >
+                خروج
+              </button>
             </div>
           </div>
         </div>

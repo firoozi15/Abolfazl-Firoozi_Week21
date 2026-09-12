@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import styles from "./Login_Register.module.css";
 import { registerSchema } from "../schemas/FormSchema";
+import { toast } from "react-toastify";
 
 function Register() {
   const {
@@ -20,8 +21,11 @@ function Register() {
     try {
       const response = await registerUser(data.username, data.password);
       console.log(response);
+      toast.success("ثبت‌نام با موفقیت انجام شد.");
     } catch (error) {
-      console.log(error.response);
+      error.response?.status === 400
+        ? toast.error("نام کاربری از قبل وجود دارد.")
+        : toast.error("ساخت حساب با خطا مواجه شد.");
     }
   };
 
