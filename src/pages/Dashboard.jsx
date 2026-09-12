@@ -21,6 +21,7 @@ function Dashboard() {
   const [limitProduct, setLimitProduct] = useState(10);
 
   const [showProductForm, setShowProductForm] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -74,7 +75,14 @@ function Dashboard() {
             <AiOutlineAppstoreAdd />
             <h2>مدیریت کالا</h2>
           </div>
-          <button onClick={() => setShowProductForm(true)}>افزودن محصول</button>
+          <button
+            onClick={() => {
+              setSelectedProduct(null);
+              setShowProductForm(true);
+            }}
+          >
+            افزودن محصول
+          </button>
         </div>
         <LimitProductTable
           limitProduct={limitProduct}
@@ -103,6 +111,8 @@ function Dashboard() {
                   product={product}
                   setDeleteId={setDeleteId}
                   showModal={showModal}
+                  setSelectedProduct={setSelectedProduct}
+                  setShowProductForm={setShowProductForm}
                 />
               ))}
           </tbody>
@@ -121,7 +131,10 @@ function Dashboard() {
         />
       )}
       {showProductForm && (
-        <ProductForm closeForm={() => setShowProductForm(false)} />
+        <ProductForm
+          closeForm={() => setShowProductForm(false)}
+          selectedProduct={selectedProduct}
+        />
       )}
     </div>
   );

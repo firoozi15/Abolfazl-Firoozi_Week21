@@ -3,7 +3,13 @@ import { MdDeleteOutline } from "react-icons/md";
 
 import styles from "../pages/Dashboard.module.css";
 
-function ProductCard({ product, setDeleteId, showModal }) {
+function ProductCard({
+  product,
+  setDeleteId,
+  showModal,
+  setSelectedProduct,
+  setShowProductForm,
+}) {
   const { id, name, price, quantity } = product;
   return (
     <tr>
@@ -12,7 +18,13 @@ function ProductCard({ product, setDeleteId, showModal }) {
       <td>{price.toLocaleString("fa-IR")} تومان</td>
       <td>{id}</td>
       <td>
-        <button className={styles.button_edit}>
+        <button
+          onClick={() => {
+            setSelectedProduct(product);
+            setShowProductForm(true);
+          }}
+          className={styles.button_edit}
+        >
           <BiEdit />
         </button>
         <button
