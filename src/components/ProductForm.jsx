@@ -1,16 +1,38 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { formProductSchema } from "../schemas/ProductSchema";
+
 import styles from "./ProductForm.module.css";
 
 function ProductForm({ closeForm, selectedProduct }) {
   const [isClosing, setisClosing] = useState(false);
-  const [product, setProduct] = useState(selectedProduct);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(formProductSchema),
+    defaultValues: {
+      name: selectedProduct?.name ?? "",
+      quantity: selectedProduct?.quantity ?? "",
+      price: selectedProduct?.price ?? "",
+    },
+  });
 
   const closeHandler = () => {
     setisClosing(true);
   };
-  
+
+  const onSubmit = async (data) => {
+    console.log(data);
+  };
+
   return (
-    <div
+    <form
+      onSubmit={handleSubmit(onSubmit)}
       onAnimationEnd={() => isClosing && closeForm()}
       className={`${isClosing && styles.hide} ${styles.container}`}
     >
@@ -19,70 +41,45 @@ function ProductForm({ closeForm, selectedProduct }) {
         <div className={styles.inputs}>
           <div>
             <label htmlFor="name">نام کالا</label>
-            {selectedProduct ? (
-              <input
-                onChange={(e) => setProduct.price(e.target.value)}
-                id="name"
-                type="text"
-                placeholder="نام کالا"
-                defaultValue={product.name}
-              />
-            ) : (
-              <input
-                onChange={(e) => setProduct.name(e.target.value)}
-                id="name"
-                type="text"
-                placeholder="نام کالا"
-              />
-            )}
+            <input
+              {...register("name")}
+              id="name"
+              type="text"
+              placeholder="نام کالا"
+            />
+            {errors.name && <span>{errors.name.message}</span>}
           </div>
           <div>
             <label htmlFor="quantity">تعداد موجودی</label>
-            {selectedProduct ? (
-              <input
-                onChange={(e) => setProduct.quantity(e.target.value)}
-                id="quantity"
-                type="number"
-                placeholder="تعداد موجودی"
-                defaultValue={product.quantity}
-              />
-            ) : (
-              <input
-                onChange={(e) => setProduct.price(e.target.value)}
-                id="quantity"
-                type="number"
-                placeholder="تعداد موجودی"
-              />
-            )}
+            <input
+              {...register("quantity")}
+              id="quantity"
+              type="number"
+              placeholder="تعداد"
+            />
+            {errors.quantity && <span>{errors.quantity.message}</span>}
           </div>
           <div>
             <label htmlFor="price">قیمت</label>
-            {selectedProduct ? (
-              <input
-                onChange={(e) => setProduct.price(e.target.value)}
-                id="price"
-                type="number"
-                placeholder="قیمت"
-                defaultValue={product.price}
-              />
-            ) : (
-              <input
-                onChange={(e) => setProduct.price(e.target.value)}
-                id="price"
-                type="number"
-                placeholder="قیمت"
-              />
-            )}
+            <input
+              {...register("price")}
+              id="price"
+              type="number"
+              placeholder="قیمت"
+            />
+            {errors.price && <span>{errors.price.message}</span>}
           </div>
         </div>
         <div className={styles.buttons}>
-          <button className={styles.confirm}>
+          <button type="submit" className={styles.confirm}>
             {selectedProduct ? "ثبت اطلاعات جدید" : "ایجاد"}
           </button>
-          <button onClick={() => closeHandler()}>انصراف</button>
+          <button type="button" onClick={() => closeHandler()}>
+            انصراف
+          </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
