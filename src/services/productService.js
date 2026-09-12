@@ -18,4 +18,22 @@ const deleteProduct = (id) => {
   return result;
 };
 
-export { getProducts, deleteProduct };
+const createProduct = (product) => {
+  const result = api
+    .post(`/products/`, product)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return result;
+};
+
+const updateProduct = (id, product) => {
+  const result = api
+    .put(`/products/${id}`, product)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return result;
+};
+
+export { getProducts, deleteProduct, createProduct, updateProduct };

@@ -28,13 +28,14 @@ function Dashboard() {
   const closeModal = () => setShowConfirm(false);
   const showModal = () => setShowConfirm(true);
 
+  const getAllProducts = async () => {
+    const products = await getProducts(page, limitProduct);
+    if (!products) return;
+    setTotalPages(products.totalPages);
+    setProducts(products.data);
+  };
+
   useEffect(() => {
-    const getAllProducts = async () => {
-      const products = await getProducts(page, limitProduct);
-      if (!products) return;
-      setTotalPages(products.totalPages);
-      setProducts(products.data);
-    };
     getAllProducts();
   }, [page, limitProduct]);
 
@@ -134,6 +135,7 @@ function Dashboard() {
         <ProductForm
           closeForm={() => setShowProductForm(false)}
           selectedProduct={selectedProduct}
+          refreshProducts={getAllProducts}
         />
       )}
     </div>

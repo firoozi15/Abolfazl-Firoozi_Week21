@@ -5,8 +5,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { formProductSchema } from "../schemas/ProductSchema";
 
 import styles from "./ProductForm.module.css";
+import { createProduct, updateProduct } from "../services/productService";
 
-function ProductForm({ closeForm, selectedProduct }) {
+function ProductForm({ closeForm, selectedProduct, refreshProducts }) {
   const [isClosing, setisClosing] = useState(false);
 
   const {
@@ -27,7 +28,16 @@ function ProductForm({ closeForm, selectedProduct }) {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      selectedProduct
+        ? await updateProduct(selectedProduct.id, data)
+        : await createProduct(data);
+
+      await refreshProducts();
+      closeHandler();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
