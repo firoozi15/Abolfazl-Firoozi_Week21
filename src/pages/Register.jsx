@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { registerUser } from "../services/authService";
+import { loginUser, registerUser } from "../services/authService";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import styles from "./Login_Register.module.css";
 import { registerSchema } from "../schemas/FormSchema";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Register() {
+  const { login } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -19,8 +22,9 @@ function Register() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await registerUser(data.username, data.password);
-      console.log(response);
+      await registerUser(data.username, data.password);
+      const response = await loginUser(data.username, data.password);
+      login(response.data.token, response.data.user);
       toast.success("ثبت‌نام با موفقیت انجام شد.");
     } catch (error) {
       error.response?.status === 400
