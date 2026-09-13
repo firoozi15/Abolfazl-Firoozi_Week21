@@ -1,12 +1,35 @@
 import api from "./api";
 
-const getProducts = () => {
+const getProducts = (page, limit, search) => {
   const result = api
-    .get("/products?page=1&limit=10")
-    .then((response) => response.data)
-    // .catch(console.log("error"));
+    .get(`/products?page=${page}&limit=${limit}&search=${search}`)
+    .then((response) => response.data);
 
   return result;
 };
 
-export { getProducts };
+const deleteProduct = (id) => {
+  const result = api
+    .delete(`/products/${id}`)
+    .then((response) => response.data);
+
+  return result;
+};
+
+const createProduct = (product) => {
+  const result = api
+    .post(`/products/`, product)
+    .then((response) => response.data);
+
+  return result;
+};
+
+const updateProduct = (id, product) => {
+  const result = api
+    .put(`/products/${id}`, product)
+    .then((response) => response.data);
+
+  return result;
+};
+
+export { getProducts, deleteProduct, createProduct, updateProduct };

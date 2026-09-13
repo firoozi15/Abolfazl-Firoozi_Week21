@@ -1,8 +1,8 @@
 import Cookies from "js-cookie";
 
 const setAuthCookie = (token, user) => {
-  Cookies.set("token", token, { expires: 1, path: "/" });
-  Cookies.set("user", `${JSON.stringify(user)}`, { expires: 1, path: "/" });
+  Cookies.set("token", token, { expires: 1/24, path: "/" });
+  Cookies.set("user", `${JSON.stringify(user)}`, { expires: 1/24, path: "/" });
 };
 
 const getAuthCookie = () => {

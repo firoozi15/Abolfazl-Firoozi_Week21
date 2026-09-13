@@ -2,31 +2,112 @@ import styles from "./Dashboard.module.css";
 
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import { MdDeleteOutline } from "react-icons/md";
-import { BiEdit } from "react-icons/bi";
-import { useEffect } from "react";
-import { getProducts } from "../services/productService";
+import { useEffect, useState } from "react";
+import { getProducts, deleteProduct } from "../services/productService";
+import ProductCard from "../components/ProductCard";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import Pagination from "../components/Pagination";
+import LimitProductTable from "../components/LimitProductTable";
+
+import ConfirmModal from "../components/ConfirmModal";
+import ProductForm from "../components/ProductForm";
+import { toast } from "react-toastify";
+import { AiOutlineLoading } from "react-icons/ai";
 
 function Dashboard() {
+  const { user, logout } = useContext(AuthContext);
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limitProduct, setLimitProduct] = useState(10);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const closeModal = () => setShowConfirm(false);
+  const showModal = () => setShowConfirm(true);
+
+  const getAllProducts = async () => {
+    try {
+      const products = await getProducts(page, limitProduct, search);
+      if (!products) return;
+      setTotalPages(products.totalPages);
+      setProducts(products.data);
+    } catch (error) {
+      toast.error("خطا در دریافت محصولات.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const getAllProducts = async () => {
-      const products = await getProducts();
-      console.log(products);
-    };
-    getAllProducts();
-  }, []);
+    setLoading(true);
+    const timer = setTimeout(() => {
+      getAllProducts();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [page, limitProduct, search]);
+
+  const deleteHandler = async (id) => {
+    try {
+      await deleteProduct(id);
+      const updatedProducts = products.filter((product) => product.id !== id);
+      setProducts(updatedProducts);
+      toast.success("کالا با موفقیت حذف شد.");
+
+      if (updatedProducts.length === 0 && page > 1) {
+        setPage((prev) => prev - 1);
+      }
+    } catch (error) {
+      toast.error("حذف کالا با خطا مواجه شد.");
+    }
+  };
+
+  const limitProductHandler = (number) => {
+    setLimitProduct(number);
+    setPage(1);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.search}>
-          <input type="text" placeholder="جستجو کالا" />
-          <CiSearch />
+          <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            type="text"
+            placeholder="جستجو کالا"
+          />
+          <div className={styles.loading}>
+            {loading ? (
+              <AiOutlineLoading className={styles.loading_animation} />
+            ) : (
+              <CiSearch />
+            )}
+          </div>
         </div>
         <div className={styles.admin_details}>
           <img src="/icon/user.png" alt="admin icon" />
           <div>
-            <h3>ابوالفضل فیروزی</h3>
-            <p>مدیر</p>
+            <h3>{user.username}</h3>
+            <div>
+              <p>مدیر</p>
+              <button
+                onClick={() => {
+                  logout();
+                  toast.success("با موفقیت خارج شدید.");
+                }}
+              >
+                خروج
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -36,8 +117,19 @@ function Dashboard() {
             <AiOutlineAppstoreAdd />
             <h2>مدیریت کالا</h2>
           </div>
-          <button>افزودن محصول</button>
+          <button
+            onClick={() => {
+              setSelectedProduct(null);
+              setShowProductForm(true);
+            }}
+          >
+            افزودن محصول
+          </button>
         </div>
+        <LimitProductTable
+          limitProduct={limitProduct}
+          limitProductHandler={limitProductHandler}
+        />
         <table className={styles.products_table}>
           <thead>
             <tr className={styles.table_haeder}>
@@ -49,27 +141,52 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>تیشرت طرح انگولار</td>
-              <td>120</td>
-              <td>90 هزار تومان</td>
-              <td>90uf9g9h7895467g974</td>
-              <td>
-                <button className={styles.button_edit}>
-                  <BiEdit />
-                </button>
-                <button className={styles.button_delete}>
-                  <MdDeleteOutline />
-                </button>
-              </td>
-            </tr>
+            {loading ? (
+              <tr>
+                <td colSpan="5">
+                  <AiOutlineLoading className={styles.loading_animation} />
+                </td>
+              </tr>
+            ) : (
+              products.length === 0 && (
+                <tr>
+                  <td colSpan="5">داده ای یافت نشد.</td>
+                </tr>
+              )
+            )}
+            {products.length > 0 &&
+              products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  setDeleteId={setDeleteId}
+                  showModal={showModal}
+                  setSelectedProduct={setSelectedProduct}
+                  setShowProductForm={setShowProductForm}
+                />
+              ))}
           </tbody>
         </table>
-        <div className={styles.pagination}>
-          <span className={styles.page_selected}>۱</span>
-          <span>۲</span>
-        </div>
+        <Pagination totalPages={totalPages} setPage={setPage} page={page} />
       </div>
+      {showConfirm && (
+        <ConfirmModal
+          closeModal={closeModal}
+          confirmMessage={"حذف"}
+          cancelMessage={"لغو"}
+          message={"آیا از حذف این محصول مطمئنید؟"}
+          confirmFunction={() => {
+            deleteHandler(deleteId);
+          }}
+        />
+      )}
+      {showProductForm && (
+        <ProductForm
+          closeForm={() => setShowProductForm(false)}
+          selectedProduct={selectedProduct}
+          refreshProducts={getAllProducts}
+        />
+      )}
     </div>
   );
 }

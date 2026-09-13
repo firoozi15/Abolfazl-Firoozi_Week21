@@ -9,6 +9,7 @@ import { loginSchema } from "../schemas/FormSchema";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Login() {
   const { login } = useContext(AuthContext);
@@ -24,8 +25,11 @@ function Login() {
     try {
       const response = await loginUser(data.username, data.password);
       login(response.data.token, response.data.user);
+      toast.success("با موفقیت وارد شدید.");
     } catch (error) {
-      console.log(error.response);
+      error.response?.status === 400
+        ? toast.error("نام کاربری یا رمز نامعتبر است.")
+        : toast.error("عملیات با خطا مواجه شد.");
     }
   };
 
