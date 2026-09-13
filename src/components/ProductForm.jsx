@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 
 function ProductForm({ closeForm, selectedProduct, refreshProducts }) {
   const [isClosing, setisClosing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
 
   const {
     register,
@@ -29,6 +31,9 @@ function ProductForm({ closeForm, selectedProduct, refreshProducts }) {
   };
 
   const onSubmit = async (data) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setIsSubmitting(true);
     try {
       if (selectedProduct) {
         await updateProduct(selectedProduct.id, data);
@@ -42,6 +47,8 @@ function ProductForm({ closeForm, selectedProduct, refreshProducts }) {
       closeHandler();
     } catch (error) {
       toast.error("عملیات با خطا مواجه شد.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -86,7 +93,11 @@ function ProductForm({ closeForm, selectedProduct, refreshProducts }) {
           </div>
         </div>
         <div className={styles.buttons}>
-          <button type="submit" className={styles.confirm}>
+          <button
+            disabled={isSubmitting}
+            type="submit"
+            className={styles.confirm}
+          >
             {selectedProduct ? "ثبت اطلاعات جدید" : "ایجاد"}
           </button>
           <button type="button" onClick={() => closeHandler()}>

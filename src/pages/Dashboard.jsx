@@ -13,6 +13,7 @@ import LimitProductTable from "../components/LimitProductTable";
 import ConfirmModal from "../components/ConfirmModal";
 import ProductForm from "../components/ProductForm";
 import { toast } from "react-toastify";
+import { AiOutlineLoading } from "react-icons/ai";
 
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -20,6 +21,8 @@ function Dashboard() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [limitProduct, setLimitProduct] = useState(10);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [showProductForm, setShowProductForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -31,18 +34,25 @@ function Dashboard() {
 
   const getAllProducts = async () => {
     try {
-      const products = await getProducts(page, limitProduct);
+      const products = await getProducts(page, limitProduct, search);
       if (!products) return;
       setTotalPages(products.totalPages);
       setProducts(products.data);
     } catch (error) {
       toast.error("خطا در دریافت محصولات.");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    getAllProducts();
-  }, [page, limitProduct]);
+    setLoading(true);
+    const timer = setTimeout(() => {
+      getAllProducts();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [page, limitProduct, search]);
 
   const deleteHandler = async (id) => {
     try {
@@ -67,8 +77,21 @@ function Dashboard() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.search}>
-          <input type="text" placeholder="جستجو کالا" />
-          <CiSearch />
+          <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            type="text"
+            placeholder="جستجو کالا"
+          />
+          <div className={styles.loading}>
+            {loading ? (
+              <AiOutlineLoading className={styles.loading_animation} />
+            ) : (
+              <CiSearch />
+            )}
+          </div>
         </div>
         <div className={styles.admin_details}>
           <img src="/icon/user.png" alt="admin icon" />
@@ -118,10 +141,18 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {products.length === 0 && (
+            {loading ? (
               <tr>
-                <td colSpan="5">داده ای یافت نشد.</td>
+                <td colSpan="5">
+                  <AiOutlineLoading className={styles.loading_animation} />
+                </td>
               </tr>
+            ) : (
+              products.length === 0 && (
+                <tr>
+                  <td colSpan="5">داده ای یافت نشد.</td>
+                </tr>
+              )
             )}
             {products.length > 0 &&
               products.map((product) => (

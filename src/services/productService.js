@@ -1,8 +1,8 @@
 import api from "./api";
 
-const getProducts = (page, limit) => {
+const getProducts = (page, limit, search) => {
   const result = api
-    .get(`/products?page=${page}&limit=${limit}`)
+    .get(`/products?page=${page}&limit=${limit}&search=${search}`)
     .then((response) => response.data);
 
   return result;
