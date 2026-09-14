@@ -3,34 +3,40 @@ import ProductCard from "../components/ProductCardStore.jsx";
 
 import { CiSearch } from "react-icons/ci";
 import Pagination from "../components/Pagination.jsx";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { getProducts } from "../services/productService.js";
+import { AiOutlineLoading } from "react-icons/ai";
 
 function Products() {
-  const products = [
-    {
-      id: 1,
-      name: "توپ",
-      price: 650000,
-      quantity: 56,
-    },
-    {
-      id: 2,
-      name: "لپ تاپ",
-      price: 45000000,
-      quantity: 12,
-    },
-    {
-      id: 3,
-      name: "هدفون",
-      price: 2500000,
-      quantity: 30,
-    },
-    {
-      id: 4,
-      name: "کیبورد",
-      price: 1200000,
-      quantity: 20,
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const getAllProducts = async () => {
+    try {
+      const products = await getProducts(page, 12, search);
+      if (!products) return;
+      console.log(products);
+      setTotalPages(products.totalPages);
+      setProducts(products.data);
+    } catch (error) {
+      toast.error("خطا در دریافت محصولات.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      getAllProducts();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [page, search]);
 
   return (
     <div className={styles.container}>
@@ -39,8 +45,19 @@ function Products() {
           <img src="/icon/L-R.png" alt="logo" />
         </div>
         <div className={styles.search}>
-          <CiSearch />
-          <input type="text" placeholder="جستجو" />
+          {loading ? (
+            <AiOutlineLoading className={styles.loading_animation} />
+          ) : (
+            <CiSearch />
+          )}
+          <input
+            type="text"
+            placeholder="جستجو"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+          />
         </div>
         <div className={styles.user}>
           <button className={styles.login}>ورود</button>
@@ -56,10 +73,17 @@ function Products() {
       </div>
 
       <div className={styles.products}>
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {loading ? (
+          <AiOutlineLoading className={styles.loading_animation} />
+        ) : products.length === 0 ? (
+          <div className={styles.empty}>داده‌ای یافت نشد.</div>
+        ) : (
+          products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        )}
       </div>
+      <Pagination totalPages={totalPages} setPage={setPage} page={page} />
     </div>
   );
 }
