@@ -11,6 +11,7 @@ import AdminRoute from "./routes/AdminRoute";
 import GuestRoute from "./routes/GuestRoute";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -57,6 +58,14 @@ function App() {
                 <GuestRoute>
                   <Register />
                 </GuestRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
               }
             />
 
