@@ -7,8 +7,17 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getProducts } from "../services/productService.js";
 import { AiOutlineLoading } from "react-icons/ai";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
+import { TbLogout2 } from "react-icons/tb";
+import { FiSettings } from "react-icons/fi";
+import { LuUser } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
 function Products() {
+  const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -60,8 +69,46 @@ function Products() {
           />
         </div>
         <div className={styles.user}>
-          <button className={styles.login}>ورود</button>
-          <button>ثبت نام</button>
+          {!user ? (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className={styles.login}
+              >
+                ورود
+              </button>
+              <button onClick={() => navigate("/register")}>ثبت نام</button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate("/profile")}
+                title="پروفایل"
+                className={styles.button_icon}
+              >
+                <LuUser />
+              </button>
+              {user.isAdmin && (
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  title="داشبورد"
+                  className={`${styles.button_icon} ${styles.dashboard}`}
+                >
+                  <FiSettings />
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  logout();
+                  toast.success("با موفقیت خارج شدید.");
+                }}
+                title="خروج"
+                className={`${styles.button_icon} ${styles.logout}`}
+              >
+                <TbLogout2 />
+              </button>
+            </>
+          )}
         </div>
       </header>
 
