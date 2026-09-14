@@ -1,16 +1,80 @@
-# React + Vite
+# 🛒 Shop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive e-commerce application built with React and Vite.
 
-Currently, two official plugins are available:
+## 📋 About The Project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Shop** is an e-commerce application that allows users to browse and search products.
 
-## React Compiler
+The project includes user authentication, product management, an admin dashboard, protected routes, pagination, form validation, and a responsive user interface.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The project was built as a React practice project with a focus on component-based architecture, state management, authentication, API integration, form management, validation, and reusable components.
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🔐 User registration and login
+- ⚡ Automatic login after registration
+- 👤 User profile
+- 🛡️ Protected routes
+- 👨‍💼 Admin dashboard
+- ➕ Add new products
+- ✏️ Edit existing products
+- 🗑️ Delete products
+- 🔍 Search products
+- 📄 Product pagination
+- ⏳ Loading states
+- 🚫 Prevent duplicate requests
+- ✅ Form validation with Yup
+- 📝 Form management with React Hook Form
+- 🔔 Toast notifications
+- 📱 Responsive design
+- 🎨 CSS Modules
+- ❌ 404 Not Found page
+
+## 🛠️ Technologies & Packages
+
+### Core Technologies
+
+- React
+- JavaScript
+- HTML5
+- CSS3
+- Vite
+
+### Packages
+
+- React Router
+- Axios
+- React Hook Form
+- Yup
+- @hookform/resolvers
+- React Toastify
+- React Icons
+- UUID
+- Cookies
+
+### React Concepts
+
+- Functional Components
+- Props
+- useState
+- useEffect
+- useContext
+- Context API
+- Custom component architecture
+- Protected Routes
+- Form management
+- API integration
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have **Node.js** and **npm** installed on your system.
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/firoozi15/Abolfazl-Firoozi_Week19.git
