@@ -1,0 +1,29 @@
+.card {
+  background: var(--white);
+  border: 1px solid var(--gray_background);
+  border-radius: 18px;
+}
+
+.imageBox {
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.imageBox img {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.info {
+  border-top: 1px solid var(--gray_background);
+  padding: 1rem;
+}
+
+.price {
+  margin-top: 1rem;
+  font-size: 22px;
+  color: var(--text);
+}

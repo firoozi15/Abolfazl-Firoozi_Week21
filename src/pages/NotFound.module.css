@@ -1,0 +1,32 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container h1 {
+  font-size: 120px;
+  color: var(--main);
+}
+
+.container h2 {
+  font-size: 30px;
+  margin: 10px 0;
+}
+
+.container p {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.container button {
+  border: none;
+  background: var(--main);
+  color: var(--white);
+  padding: 12px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
