@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { loginUser } from "../services/authService";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import styles from "./Login_Register.module.css";
+import styles from "../styles/Login_Register.module.css";
 import { loginSchema } from "../schemas/FormSchema";
 
 import { useContext } from "react";

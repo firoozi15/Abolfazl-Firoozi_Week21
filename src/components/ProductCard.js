@@ -1,7 +1,7 @@
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
 
-import styles from "../pages/Dashboard.module.css";
+import styles from "../styles/Dashboard.module.css";
 
 function ProductCard({
   product,

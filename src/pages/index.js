@@ -1,14 +1,14 @@
-import styles from "./Products.module.css";
-import ProductCard from "../components/ProductCardStore.jsx";
+import styles from "../styles/Home.module.css";
+import ProductCard from "../components/ProductCardStore.js";
 
 import { CiSearch } from "react-icons/ci";
-import Pagination from "../components/Pagination.jsx";
+import Pagination from "../components/Pagination.js";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getProducts } from "../services/productService.js";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext.js";
 
 import { TbLogout2 } from "react-icons/tb";
 import { FiSettings } from "react-icons/fi";

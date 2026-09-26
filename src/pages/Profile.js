@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import styles from "./Profile.module.css";
+import styles from "../styles/Profile.module.css";
 import { toast } from "react-toastify";
 
 function Profile() {

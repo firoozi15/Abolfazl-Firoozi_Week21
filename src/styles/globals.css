@@ -1,14 +1,15 @@
-@import url("./styles/variables.css");
+@import url("./variables.css");
 
 @font-face {
   font-family: "Vazirmatn";
-  src: url("./assets/fonts/Vazirmatn-Medium.woff2");
+  src: url("../../public/fonts/Vazirmatn-Medium.woff2");
   font-weight: 500;
 }
 
 :root {
   font-family: "Vazirmatn";
   background-color: var(--background);
+  direction: rtl;
 }
 
 body {
