@@ -1,16 +1,129 @@
-# React + Vite
+# 🛒 Shop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive e-commerce application built with React and Next.js.
 
-Currently, two official plugins are available:
+## 📋 About The Project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Shop** is an e-commerce application that allows users to browse and search products.
 
-## React Compiler
+The project includes user authentication, product management, an admin dashboard, protected routes, pagination, form validation, loading states, and a responsive user interface.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The project was built as a React and Next.js practice project with a focus on component-based architecture, state management, authentication, API integration, form management, validation, routing, and reusable components.
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* 🔐 User registration and login
+* ⚡ Automatic login after registration
+* 👤 User profile
+* 🛡️ Protected routes
+* 👨‍💼 Admin dashboard
+* ➕ Add new products
+* ✏️ Edit existing products
+* 🗑️ Delete products
+* 🔍 Search products
+* 📄 Product pagination
+* ⏳ Loading states
+* 🚫 Prevent duplicate requests
+* ✅ Form validation with Yup
+* 📝 Form management with React Hook Form
+* 🔔 Toast notifications
+* 📱 Responsive design
+* 🎨 CSS Modules
+* ❌ 404 Not Found page
+
+## 🛠️ Technologies & Packages
+
+### Core Technologies
+
+* React
+* Next.js
+* JavaScript
+* HTML5
+* CSS3
+
+### Packages
+
+* Axios
+* React Hook Form
+* Yup
+* @hookform/resolvers
+* React Toastify
+* React Icons
+* UUID
+* js-cookie
+
+### Next.js
+
+* Pages Router
+* File-based routing
+* `next/router`
+* `next/link`
+* `_app.js`
+* Protected routes
+* Custom 404 page
+
+### React Concepts
+
+* Functional Components
+* Props
+* useState
+* useEffect
+* useContext
+* Context API
+* Custom component architecture
+* Form management
+* API integration
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have **Node.js** and **npm** installed on your system.
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/firoozi15/Abolfazl-Firoozi_Week21.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd Abolfazl-Firoozi_Week21
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+### Run the Development Server
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000 in your browser.
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Start Production Server
+
+```bash
+npm start
+```
+
+## 📌 Version
+
+Current version: **1.1.0**
+
+## 👨‍💻 Author
+
+**Abolfazl Firoozi**

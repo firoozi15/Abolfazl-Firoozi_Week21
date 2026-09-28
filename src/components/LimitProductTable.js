@@ -1,4 +1,4 @@
-import styles from "../pages/Dashboard.module.css";
+import styles from "../styles/Dashboard.module.css";
 
 function LimitProductTable({ limitProduct, limitProductHandler }) {
   return (
