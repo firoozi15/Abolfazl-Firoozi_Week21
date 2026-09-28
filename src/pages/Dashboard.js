@@ -15,6 +15,8 @@ import ProductForm from "../components/ProductForm";
 import { toast } from "react-toastify";
 import { AiOutlineLoading } from "react-icons/ai";
 
+import AdminRoute from "../routes/AdminRoute";
+
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
@@ -74,120 +76,122 @@ function Dashboard() {
     setPage(1);
   };
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.search}>
-          <input
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            type="text"
-            placeholder="جستجو کالا"
-          />
-          <div className={styles.loading}>
-            {loading ? (
-              <AiOutlineLoading className={styles.loading_animation} />
-            ) : (
-              <CiSearch />
-            )}
+    <AdminRoute>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.search}>
+            <input
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+              type="text"
+              placeholder="جستجو کالا"
+            />
+            <div className={styles.loading}>
+              {loading ? (
+                <AiOutlineLoading className={styles.loading_animation} />
+              ) : (
+                <CiSearch />
+              )}
+            </div>
           </div>
-        </div>
-        <div className={styles.admin_details}>
-          <img src="/icon/user.png" alt="admin icon" />
-          <div>
-            <h3>{user.username}</h3>
+          <div className={styles.admin_details}>
+            <img src="/icon/user.png" alt="admin icon" />
             <div>
-              <p>مدیر</p>
-              <button
-                onClick={() => {
-                  logout();
-                  toast.success("با موفقیت خارج شدید.");
-                }}
-              >
-                خروج
-              </button>
+              <h3>{user?.username}</h3>
+              <div>
+                <p>مدیر</p>
+                <button
+                  onClick={() => {
+                    logout();
+                    toast.success("با موفقیت خارج شدید.");
+                  }}
+                >
+                  خروج
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className={styles.main}>
-        <div className={styles.main_header}>
-          <div>
-            <AiOutlineAppstoreAdd />
-            <h2>مدیریت کالا</h2>
+        <div className={styles.main}>
+          <div className={styles.main_header}>
+            <div>
+              <AiOutlineAppstoreAdd />
+              <h2>مدیریت کالا</h2>
+            </div>
+            <button
+              onClick={() => {
+                setSelectedProduct(null);
+                setShowProductForm(true);
+              }}
+            >
+              افزودن محصول
+            </button>
           </div>
-          <button
-            onClick={() => {
-              setSelectedProduct(null);
-              setShowProductForm(true);
-            }}
-          >
-            افزودن محصول
-          </button>
-        </div>
-        <LimitProductTable
-          limitProduct={limitProduct}
-          limitProductHandler={limitProductHandler}
-        />
-        <table className={styles.products_table}>
-          <thead>
-            <tr className={styles.table_haeder}>
-              <th>نام کالا</th>
-              <th>موجودی</th>
-              <th>قیمت</th>
-              <th>شناسه کالا</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="5">
-                  <AiOutlineLoading className={styles.loading_animation} />
-                </td>
+          <LimitProductTable
+            limitProduct={limitProduct}
+            limitProductHandler={limitProductHandler}
+          />
+          <table className={styles.products_table}>
+            <thead>
+              <tr className={styles.table_haeder}>
+                <th>نام کالا</th>
+                <th>موجودی</th>
+                <th>قیمت</th>
+                <th>شناسه کالا</th>
+                <th></th>
               </tr>
-            ) : (
-              products.length === 0 && (
+            </thead>
+            <tbody>
+              {loading ? (
                 <tr>
-                  <td colSpan="5">داده ای یافت نشد.</td>
+                  <td colSpan="5">
+                    <AiOutlineLoading className={styles.loading_animation} />
+                  </td>
                 </tr>
-              )
-            )}
-            {products.length > 0 &&
-              products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  setDeleteId={setDeleteId}
-                  showModal={showModal}
-                  setSelectedProduct={setSelectedProduct}
-                  setShowProductForm={setShowProductForm}
-                />
-              ))}
-          </tbody>
-        </table>
-        <Pagination totalPages={totalPages} setPage={setPage} page={page} />
+              ) : (
+                products.length === 0 && (
+                  <tr>
+                    <td colSpan="5">داده ای یافت نشد.</td>
+                  </tr>
+                )
+              )}
+              {products.length > 0 &&
+                products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    setDeleteId={setDeleteId}
+                    showModal={showModal}
+                    setSelectedProduct={setSelectedProduct}
+                    setShowProductForm={setShowProductForm}
+                  />
+                ))}
+            </tbody>
+          </table>
+          <Pagination totalPages={totalPages} setPage={setPage} page={page} />
+        </div>
+        {showConfirm && (
+          <ConfirmModal
+            closeModal={closeModal}
+            confirmMessage={"حذف"}
+            cancelMessage={"لغو"}
+            message={"آیا از حذف این محصول مطمئنید؟"}
+            confirmFunction={() => {
+              deleteHandler(deleteId);
+            }}
+          />
+        )}
+        {showProductForm && (
+          <ProductForm
+            closeForm={() => setShowProductForm(false)}
+            selectedProduct={selectedProduct}
+            refreshProducts={getAllProducts}
+          />
+        )}
       </div>
-      {showConfirm && (
-        <ConfirmModal
-          closeModal={closeModal}
-          confirmMessage={"حذف"}
-          cancelMessage={"لغو"}
-          message={"آیا از حذف این محصول مطمئنید؟"}
-          confirmFunction={() => {
-            deleteHandler(deleteId);
-          }}
-        />
-      )}
-      {showProductForm && (
-        <ProductForm
-          closeForm={() => setShowProductForm(false)}
-          selectedProduct={selectedProduct}
-          refreshProducts={getAllProducts}
-        />
-      )}
-    </div>
+    </AdminRoute>
   );
 }
 

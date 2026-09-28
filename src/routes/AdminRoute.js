@@ -1,15 +1,32 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Navigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 function AdminRoute({ children }) {
+  const router = useRouter();
   const { user, isLoadingCookie, token } = useContext(AuthContext);
 
-  if (isLoadingCookie) return <h1>در حال بارگذاری</h1>;
-  if (!user || !token) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    if (isLoadingCookie) return;
+
+    if (!user || !token) {
+      router.replace("/Login");
+      return;
+    }
+
+    if (!user.isAdmin) {
+      router.replace("/404");
+    }
+  }, [user, token, isLoadingCookie, router]);
+
+  if (isLoadingCookie) {
+    return <h1>در حال بارگذاری</h1>;
   }
-  if (!user.isAdmin) return <Navigate to="/404" />;
+
+  if (!user || !token || !user.isAdmin) {
+    return null;
+  }
+
   return children;
 }
 

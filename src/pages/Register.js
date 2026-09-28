@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 
 import { loginUser, registerUser } from "../services/authService";
@@ -9,6 +9,7 @@ import { registerSchema } from "../schemas/FormSchema";
 import { toast } from "react-toastify";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import GuestRoute from "../routes/GuestRoute";
 
 function Register() {
   const { login } = useContext(AuthContext);
@@ -34,32 +35,38 @@ function Register() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
-      <div className={styles.card}>
-        <img src="/icon/L-R.png" alt="logo" />
-        <p>فرم ثبت نام</p>
-        <input {...register("username")} type="text" placeholder="نام کاربری" />
-        {errors.username && <span>{errors.username.message}</span>}
-        <input
-          {...register("password")}
-          type="password"
-          placeholder="رمز عبور"
-        />
-        {errors.password && <span>{errors.password.message}</span>}
-        <input
-          {...register("confirmPassword")}
-          type="password"
-          placeholder="تکرار رمز عبور"
-        />
-        {errors.confirmPassword && (
-          <span>{errors.confirmPassword.message}</span>
-        )}
-        <button type="submit">ثبت نام</button>
-        <div>
-          <Link to="/login">حساب کاربری دارید؟</Link>
+    <GuestRoute>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
+        <div className={styles.card}>
+          <img src="/icon/L-R.png" alt="logo" />
+          <p>فرم ثبت نام</p>
+          <input
+            {...register("username")}
+            type="text"
+            placeholder="نام کاربری"
+          />
+          {errors.username && <span>{errors.username.message}</span>}
+          <input
+            {...register("password")}
+            type="password"
+            placeholder="رمز عبور"
+          />
+          {errors.password && <span>{errors.password.message}</span>}
+          <input
+            {...register("confirmPassword")}
+            type="password"
+            placeholder="تکرار رمز عبور"
+          />
+          {errors.confirmPassword && (
+            <span>{errors.confirmPassword.message}</span>
+          )}
+          <button type="submit">ثبت نام</button>
+          <div>
+            <Link href="/Login">حساب کاربری دارید؟</Link>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </GuestRoute>
   );
 }
 
