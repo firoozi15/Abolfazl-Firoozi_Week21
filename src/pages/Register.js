@@ -7,11 +7,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "../styles/Login_Register.module.css";
 import { registerSchema } from "../schemas/FormSchema";
 import { toast } from "react-toastify";
-import { useContext } from "react";
+import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import GuestRoute from "../routes/GuestRoute";
 
 function Register() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useContext(AuthContext);
   const {
     register,
@@ -20,8 +21,13 @@ function Register() {
   } = useForm({
     resolver: yupResolver(registerSchema),
   });
+  const submittingRef = useRef(false);
 
   const onSubmit = async (data) => {
+    if (submittingRef.current) return;
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
     try {
       await registerUser(data.username, data.password);
       const response = await loginUser(data.username, data.password);
@@ -31,6 +37,9 @@ function Register() {
       error.response?.status === 400
         ? toast.error("نام کاربری از قبل وجود دارد.")
         : toast.error("ساخت حساب با خطا مواجه شد.");
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -60,7 +69,9 @@ function Register() {
           {errors.confirmPassword && (
             <span>{errors.confirmPassword.message}</span>
           )}
-          <button type="submit">ثبت نام</button>
+          <button type="submit">
+            {isSubmitting ? "در حال برسی ..." : "ثبت نام"}
+          </button>
           <div>
             <Link href="/Login">حساب کاربری دارید؟</Link>
           </div>
