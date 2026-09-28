@@ -1,22 +1,22 @@
-import styles from "./Products.module.css";
-import ProductCard from "../components/ProductCardStore.jsx";
+import styles from "../styles/Home.module.css";
+import ProductCard from "../components/ProductCardStore.js";
 
 import { CiSearch } from "react-icons/ci";
-import Pagination from "../components/Pagination.jsx";
+import Pagination from "../components/Pagination.js";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getProducts } from "../services/productService.js";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext.js";
 
 import { TbLogout2 } from "react-icons/tb";
 import { FiSettings } from "react-icons/fi";
 import { LuUser } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 function Products() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user, logout } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -72,17 +72,17 @@ function Products() {
           {!user ? (
             <>
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => router.push("/Login")}
                 className={styles.login}
               >
                 ورود
               </button>
-              <button onClick={() => navigate("/register")}>ثبت نام</button>
+              <button onClick={() => router.push("/Register")}>ثبت نام</button>
             </>
           ) : (
             <>
               <button
-                onClick={() => navigate("/profile")}
+                onClick={() => router.push("/Profile")}
                 title="پروفایل"
                 className={styles.button_icon}
               >
@@ -90,7 +90,7 @@ function Products() {
               </button>
               {user.isAdmin && (
                 <button
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() => router.push("/Dashboard")}
                   title="داشبورد"
                   className={`${styles.button_icon} ${styles.dashboard}`}
                 >

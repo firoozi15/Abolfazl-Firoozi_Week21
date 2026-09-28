@@ -1,15 +1,16 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 
 import { loginUser } from "../services/authService";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import styles from "./Login_Register.module.css";
+import styles from "../styles/Login_Register.module.css";
 import { loginSchema } from "../schemas/FormSchema";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import GuestRoute from "../routes/GuestRoute";
 
 function Login() {
   const { login } = useContext(AuthContext);
@@ -34,24 +35,30 @@ function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
-      <div className={styles.card}>
-        <img src="/icon/L-R.png" alt="logo" />
-        <p>فرم ورود</p>
-        <input {...register("username")} type="text" placeholder="نام کاربری" />
-        {errors.username && <span>{errors.username.message}</span>}
-        <input
-          {...register("password")}
-          type="password"
-          placeholder="رمز عبور"
-        />
-        {errors.password && <span>{errors.password.message}</span>}
-        <button type="submit">ورود</button>
-        <div>
-          <Link to="/register">ایجاد حساب کاربری!</Link>
+    <GuestRoute>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
+        <div className={styles.card}>
+          <img src="/icon/L-R.png" alt="logo" />
+          <p>فرم ورود</p>
+          <input
+            {...register("username")}
+            type="text"
+            placeholder="نام کاربری"
+          />
+          {errors.username && <span>{errors.username.message}</span>}
+          <input
+            {...register("password")}
+            type="password"
+            placeholder="رمز عبور"
+          />
+          {errors.password && <span>{errors.password.message}</span>}
+          <button type="submit">ورود</button>
+          <div>
+            <Link href="/Register">ایجاد حساب کاربری!</Link>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </GuestRoute>
   );
 }
 
