@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from "./ConfirmModal.module.css";
-import DeleteIcon from "../assets/icons/Delete.svg";
 
 function ConfirmModal({
   confirmFunction,
@@ -19,7 +18,7 @@ function ConfirmModal({
     >
       <div className={styles.form}>
         <div className={styles.formMain}>
-          <img src={DeleteIcon} alt="DeleteIcon" />
+          <img src="/icon/Delete.svg" alt="DeleteIcon" />
           <p>{message}</p>
           <div className={styles.modalButtons}>
             <button
